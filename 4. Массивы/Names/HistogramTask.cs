@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 namespace Names;
 
@@ -9,7 +8,7 @@ internal static class HistogramTask
     
     public static HistogramData GetBirthsPerDayHistogram(NameData[] names, string name)
     {
-        var xLabels = GetDays();
+        var xLabels = GetDaysNumbers();
 
         var yLabels = GetBirthsPerDay(names, name);
 
@@ -19,7 +18,7 @@ internal static class HistogramTask
             yLabels);
     }
 
-    public static string[] GetDays()
+    public static string[] GetDaysNumbers()
     {
         var days = new string[AmountOfDaysInMonth];
 
@@ -33,8 +32,10 @@ internal static class HistogramTask
     {
         var birthsCounts = new double[AmountOfDaysInMonth];
 
-        var withRequiredName = names
-            .Where(n => n.BirthDate.Day != 1 && n.Name == name);
+        var withoutBornOnFirstDayOfMonth = names
+            .Where(n => n.BirthDate.Day != 1);
+
+        var withRequiredName = withoutBornOnFirstDayOfMonth.Where(n => n.Name == name);
             
         foreach (var nameData in withRequiredName)
             birthsCounts[nameData.BirthDate.Day - 1]++;
