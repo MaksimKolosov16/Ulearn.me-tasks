@@ -1,6 +1,6 @@
 ﻿namespace UsefulAcquaintances
 {
-    public class UsefulAcquaintancesOptimizer
+    public class ContactsOptimizer
     {
         private class Contact
         {
