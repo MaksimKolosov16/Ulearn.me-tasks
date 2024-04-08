@@ -35,7 +35,6 @@ namespace SplitAndJoin
 
         public static string ReplaceIncorrectSeparators(string text)
         {
-
             var separatedColumns = text.Split(incorrectSeparators, StringSplitOptions.RemoveEmptyEntries);
             
             return string.Join("\t", separatedColumns);
