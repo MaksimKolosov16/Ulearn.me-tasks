@@ -18,14 +18,12 @@ namespace Benford_s_law
 
             var wordOrNumbers = text.Split(' ');
 
-            foreach (var wordOrNumber in wordOrNumbers.Where(w => w.Length > 0))
+            foreach (var wordOrNumber in wordOrNumbers)
             {
                 var firstSymbol = wordOrNumber[0];
 
                 if (char.IsDigit(firstSymbol))
-                {
-                    statistics[firstSymbol - '0']++;
-                }
+                   statistics[firstSymbol - '0']++;
             }
 
             return statistics;
