@@ -8,42 +8,45 @@ static class SentencesParserTask
 
     public static List<List<string>> ParseSentences(string text)
     {
-        var result = GetParsedSentences(text);
+        return GetNotEmptyParsedSentences(text);
+    }
+
+    private static List<List<string>> GetNotEmptyParsedSentences(string text)
+    {
+        var result = new List<List<string>>();
+
+        var sentences = text.Split(separators);
+
+        foreach (var sentence in sentences)
+        {
+            var splitedToWords = sentence.ToWordsInLowerCase();
+
+            var withoutEmptyWords = splitedToWords.Where(w => w.Any());
+
+            if (withoutEmptyWords.Any())
+                result.Add(withoutEmptyWords.ToList());
+        }
 
         return result;
     }
 
-    public static List<List<string>> GetParsedSentences(string text)
+    private static IEnumerable<string> ToWordsInLowerCase(this string sentence)
     {
-        var sentences = text.Split(separators);
-
-        return sentences.Select(ParseSentenceToWords).ToList();
-    }
-
-    public static List<string> ParseSentenceToWords(string sentence)
-    {
-        var words = new List<string>();
-
         var word = new StringBuilder();
 
-        for (int i = 0; i < sentence.Length; i++)
+        for (var i = 0; i < sentence.Length; i++)
         {
             var symbol = sentence[i];
 
             if (char.IsLetter(symbol) || symbol == '\'')
-                word.Append(symbol);
+                word.Append(char.ToLower(symbol));
             else
             {
-                if (symbol == '\\')
-                    i++; // skip next letter, because it is an escape sequence
-
-                words.Add(word.ToString().ToLower());
+                yield return word.ToString();
                 word.Clear();
             }
         }
 
-        words.Add(word.ToString().ToLower());
-
-        return words.Where(w => w.Length > 0).ToList();
+        yield return word.ToString().ToLower();
     }
 }
